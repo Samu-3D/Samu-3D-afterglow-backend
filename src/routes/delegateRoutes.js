@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { registerPublic, createDelegate, listDelegates, getDelegate, updateDelegate, deleteDelegate, checkinByDelegateId, checkinByQr, resendEmail } from "../controllers/delegateController.js";
+import { registerPublic, getPublicEvent, createDelegate, listDelegates, getDelegate, updateDelegate, deleteDelegate, checkinByDelegateId, checkinByQr, resendEmail } from "../controllers/delegateController.js";
 import { protect, requireRoles, requireEventAccess } from "../middleware/auth.js";
 
 const router = Router();
 
 // Public registration link
+router.get("/public/events/:eventId", getPublicEvent);
 router.post("/public/events/:eventId/register", registerPublic);
 
 // Event delegates

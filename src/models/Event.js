@@ -27,6 +27,23 @@ const badgeTemplateSchema = new mongoose.Schema(
     photoY: { type: Number, default: 20 },
     photoSize: { type: Number, default: 20 },
     showPhoto: { type: Boolean, default: true },
+    photoShape: { type: String, default: "circle" },
+    photoBorderColor: { type: String, default: "#ffffff" },
+    photoBorderWidth: { type: Number, default: 2 },
+    photoFit: { type: String, default: "cover" },
+    showPhotoPlaceholder: { type: Boolean, default: true },
+    showEventTitle: { type: Boolean, default: true },
+    eventTitleX: { type: Number, default: 50 },
+    eventTitleY: { type: Number, default: 5 },
+    eventTitleSize: { type: Number, default: 9 },
+    eventTitleColor: { type: String, default: "#E8B267" },
+    eventTitleWeight: { type: String, default: "bold" },
+    eventTitleUppercase: { type: Boolean, default: true },
+    showQR: { type: Boolean, default: true },
+    qrBackground: { type: Boolean, default: true },
+    qrPadding: { type: Number, default: 5 },
+    qrRadius: { type: Number, default: 6 },
+    backgroundFit: { type: String, default: "cover" },
   },
   { _id: false }
 );
@@ -59,6 +76,8 @@ const eventSchema = new mongoose.Schema(
       photoUploadEnabled: { type: Boolean, default: true },
       emailConfirmationEnabled: { type: Boolean, default: true },
       requiredFields: [{ type: String }],
+      fieldModes: { type: Map, of: String },
+      categories: [{ type: String }],
       customFields: [
         {
           label: String,

@@ -6,6 +6,31 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { makeDelegateId, makeQrToken } from "../utils/id.js";
 import { sendRegistrationEmail } from "../utils/email.js";
 
+function requiredMessage(event, body) {
+  const settings = event.registrationSettings || {};
+  const legacyRequired = settings.requiredFields || ["fullName", "email"];
+  const modes = settings.fieldModes || new Map();
+  const getMode = (key) => {
+    if (typeof modes.get === "function" && modes.get(key)) return modes.get(key);
+    if (modes[key]) return modes[key];
+    return legacyRequired.includes(key) ? "required" : "optional";
+  };
+  const labels = { fullName: "Full name", email: "Email", phone: "Phone", organization: "Organization", jobTitle: "Job title", country: "Country", category: "Category", photoUrl: "Participant photo" };
+  for (const key of Object.keys(labels)) {
+    if (getMode(key) === "required" && !body[key]) return `${labels[key]} is required.`;
+  }
+  for (const field of settings.customFields || []) {
+    if (field.required && !body.customFields?.[field.key]) return `${field.label || field.key} is required.`;
+  }
+  return null;
+}
+
+export const getPublicEvent = asyncHandler(async (req, res) => {
+  const event = await Event.findById(req.params.eventId).select("name date venue organizer description status themeColor logoUrl registrationSettings badgeTemplate printSettings");
+  if (!event) throw new ApiError(404, "Event not found.");
+  res.json({ success: true, event });
+});
+
 function buildDelegatePayload(body, eventId) {
   return {
     event: eventId,
@@ -25,6 +50,8 @@ export const registerPublic = asyncHandler(async (req, res) => {
   const event = await Event.findById(req.params.eventId);
   if (!event) throw new ApiError(404, "Event not found.");
   if (event.status === "closed") throw new ApiError(403, "Registration is closed for this event.");
+  const missing = requiredMessage(event, req.body);
+  if (missing) throw new ApiError(400, missing);
 
   const delegate = await Delegate.create({
     ...buildDelegatePayload(req.body, event._id),
@@ -46,6 +73,8 @@ export const registerPublic = asyncHandler(async (req, res) => {
 export const createDelegate = asyncHandler(async (req, res) => {
   const event = await Event.findById(req.params.eventId);
   if (!event) throw new ApiError(404, "Event not found.");
+  const missing = requiredMessage(event, req.body);
+  if (missing) throw new ApiError(400, missing);
 
   const delegate = await Delegate.create({
     ...buildDelegatePayload(req.body, event._id),
