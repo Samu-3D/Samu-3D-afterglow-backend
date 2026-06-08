@@ -17,6 +17,7 @@ const badgeFieldSchema = new mongoose.Schema(
 const badgeTemplateSchema = new mongoose.Schema(
   {
     backgroundUrl: String,
+    backgroundName: String,
     bgColor: { type: String, default: "#1A1A19" },
     size: { type: String, default: "A6" },
     fields: [badgeFieldSchema],
@@ -51,6 +52,7 @@ const badgeTemplateSchema = new mongoose.Schema(
 const printSettingsSchema = new mongoose.Schema(
   {
     paperSize: { type: String, default: "A6" },
+    layout: { type: String, default: "single" },
     customWidthMm: { type: Number, default: 105 },
     customHeightMm: { type: Number, default: 148 },
     marginMm: { type: Number, default: 0 },
@@ -70,6 +72,18 @@ const eventSchema = new mongoose.Schema(
     status: { type: String, enum: ["open", "closed"], default: "open" },
     themeColor: { type: String, default: "#CF6B11" },
     logoUrl: String,
+    bannerUrl: String,
+    bannerName: String,
+    eventFiles: [
+      {
+        name: String,
+        type: String,
+        size: Number,
+        dataUrl: String,
+        url: String,
+        uploadedAt: Date,
+      },
+    ],
     badgeTemplate: { type: badgeTemplateSchema, default: () => ({}) },
     printSettings: { type: printSettingsSchema, default: () => ({}) },
     registrationSettings: {

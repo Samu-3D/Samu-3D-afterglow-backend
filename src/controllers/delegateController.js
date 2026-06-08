@@ -26,7 +26,7 @@ function requiredMessage(event, body) {
 }
 
 export const getPublicEvent = asyncHandler(async (req, res) => {
-  const event = await Event.findById(req.params.eventId).select("name date venue organizer description status themeColor logoUrl registrationSettings badgeTemplate printSettings");
+  const event = await Event.findById(req.params.eventId).select("name date venue organizer description status themeColor logoUrl bannerUrl bannerName eventFiles registrationSettings badgeTemplate printSettings");
   if (!event) throw new ApiError(404, "Event not found.");
   res.json({ success: true, event });
 });
