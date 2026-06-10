@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
 
+<<<<<<< HEAD
 export const ROLES = ["super_admin", "event_admin", "registration_staff", "checkin_staff", "badge_staff"];
 
 const userSchema = new mongoose.Schema(
@@ -32,3 +32,35 @@ userSchema.methods.toSafeJSON = function toSafeJSON() {
 };
 
 export const User = mongoose.model("User", userSchema);
+=======
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      default: "AFTERGLOW User",
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    companyName: {
+      type: String,
+      default: "MOPAS Ltd",
+    },
+    role: {
+      type: String,
+      default: "owner",
+    },
+  },
+  { timestamps: true }
+);
+
+export default mongoose.model("User", userSchema);
+>>>>>>> 50e99e5 (Switch backend from MongoDB to Supabase)

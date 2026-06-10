@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+<<<<<<< HEAD
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -10,6 +11,9 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { connectDB } from "./config/db.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
+=======
+const { default: app } = await import("./app.js");
+>>>>>>> 50e99e5 (Switch backend from MongoDB to Supabase)
 
 import authRoutes from "./routes/authRoutes.js";
 import eventRoutes from "./routes/eventRoutes.js";
@@ -25,6 +29,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+<<<<<<< HEAD
 app.set("trust proxy", 1);
 app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
@@ -88,3 +93,8 @@ connectDB()
     console.error("❌ Failed to start server:", error.message);
     process.exit(1);
   });
+=======
+app.listen(PORT, () => {
+  console.log(`AFTERGLOW API running on port ${PORT}`);
+});
+>>>>>>> 50e99e5 (Switch backend from MongoDB to Supabase)
