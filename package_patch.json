@@ -1,0 +1,9 @@
+{
+  "dependencies_to_add": {
+    "web-push": "^3.6.7"
+  },
+  "commands": [
+    "npm install web-push",
+    "node scripts/generate-vapid-keys.js"
+  ]
+}
